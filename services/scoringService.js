@@ -67,14 +67,14 @@ class CommunicationScoringService {
     const wpm = words.length / 2; // Assuming 2-minute conversation
     
     // Calculate filler ratio
-    const fillerRatio = fillerCount / words.length;
+    const fillerRatio = words.length > 0 ? fillerCount / words.length : 0;
     
     // Score based on multiple factors:
     // 1. Low filler word ratio (40% weight)
     // 2. Appropriate speech rate 150-200 WPM (40% weight)
     // 3. Sentence length variation (20% weight)
     
-    const fillerScore = Math.max(0, 30 - (fillerRatio * 150)); // Max 30, lower with more fillers
+    const fillerScore = Math.max(0, 30 - (fillerRatio * 200)); // Max 30, lower with more fillers
     const rateScore = wpm < 100 ? (wpm / 100) * 30 : (wpm > 250 ? (250 / wpm) * 30 : 30); // Ideal 100-250 WPM
     const sentenceLengthVariation = this.analyzeSentenceVariation(transcript);
     const variationScore = sentenceLengthVariation * 30; // Convert to 0-30 scale
@@ -127,19 +127,23 @@ class CommunicationScoringService {
     const subjectVerbErrors = transcript.match(/\b(I|we|they)\s+(has|was|is)\b|\b(he|she|it)\s+(have|were|are)\b/gi);
     if (subjectVerbErrors) errorCount += subjectVerbErrors.length;
     
+    // Detect incorrect verb forms
+    const incorrectVerbs = transcript.match(/\b(I|you|we|they)\s+(was|has)\b|\b(he|she|it)\s+(were|have)\b/gi);
+    if (incorrectVerbs) errorCount += incorrectVerbs.length;
+    
     // Calculate words per complex structure ratio
     const words = transcript.trim().split(/\s+/);
-    const complexityRatio = complexStructureCount / words.length;
+    const complexityRatio = words.length > 0 ? complexStructureCount / words.length : 0;
     
     // Score based on:
-    // 1. Complex structure usage (70% weight)
-    // 2. Fewer grammar errors (30% weight)
+    // 1. Complex structure usage (60% weight)
+    // 2. Fewer grammar errors (40% weight)
     
-    const complexityScore = Math.min(30, complexityRatio * 200); // Scale up for visibility
-    const errorPenalty = Math.max(0, 30 - (errorCount * 2)); // Deduct 2 points per error
+    const complexityScore = Math.min(30, complexityRatio * 300); // Scale up for visibility
+    const errorPenalty = Math.max(0, 30 - (errorCount * 3)); // Deduct 3 points per error
     
     // Weighted average
-    const score = (complexityScore * 0.7) + (errorPenalty * 0.3);
+    const score = (complexityScore * 0.6) + (errorPenalty * 0.4);
     
     return Math.max(0, Math.min(30, Math.round(score * 100) / 100));
   }
@@ -147,8 +151,9 @@ class CommunicationScoringService {
   // Analyze vocabulary richness (0-30 scale)
   analyzeVocabulary(transcript) {
     const words = transcript.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/);
-    const uniqueWords = new Set(words.filter(w => w.length > 3)); // Only consider words longer than 3 chars
-    const totalWords = words.length;
+    const validWords = words.filter(w => w.length > 0); // Filter out empty strings
+    const uniqueWords = new Set(validWords.filter(w => w.length > 3)); // Only consider words longer than 3 chars
+    const totalWords = validWords.length;
     
     if (totalWords === 0) return 15; // Default middle value
     
@@ -157,7 +162,7 @@ class CommunicationScoringService {
     
     // Count advanced vocabulary (simplified - looks for longer words)
     const advancedWords = [...uniqueWords].filter(word => word.length >= 8).length;
-    const advancedRatio = advancedWords / uniqueWords.size;
+    const advancedRatio = uniqueWords.size > 0 ? advancedWords / uniqueWords.size : 0;
     
     // Score based on:
     // 1. Lexical diversity (60% weight)
@@ -236,15 +241,15 @@ class CommunicationScoringService {
     // Count question-answer patterns (user asks, bot responds, user responds)
     const userMessages = (transcript.match(/user:/g) || []).length;
     const botMessages = (transcript.match(/bot:/g) || []).length;
-    const interactionScore = Math.min(30, (userMessages + botMessages));
+    const interactionScore = Math.min(30, (userMessages + botMessages) * 2);
     
     // Score based on:
     // 1. Transition word usage (40% weight)
     // 2. Pronoun/reference usage (30% weight)
     // 3. Interaction patterns (30% weight)
     
-    const transitionScore = Math.min(30, transitionCount * 3); // Scale appropriately
-    const referenceScore = Math.min(30, pronounCount * 2); // Two points per pronoun reference
+    const transitionScore = Math.min(30, transitionCount * 4); // Scale appropriately
+    const referenceScore = Math.min(30, pronounCount * 3); // Three points per pronoun reference
     const interactionScoreWeighted = interactionScore * 0.3;
     
     // Weighted average
@@ -382,7 +387,7 @@ class CommunicationScoringService {
       feedback.recommendations.push("Practice varying your pitch to emphasize key points");
     } else if (scores.intonation >= 18) {
       feedback.strengths.push("Basic intonation patterns");
-      feedback.recommendations.push("Listen to native speakers and模仿 their intonation patterns");
+      feedback.recommendations.push("Listen to native speakers and模仿他们的 intonation patterns");
     } else {
       feedback.weaknesses.push("Intonation could be more expressive");
       feedback.recommendations.push("Practice reading aloud with emotional expression");

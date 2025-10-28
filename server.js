@@ -66,6 +66,7 @@ io.on('connection', (socket) => {
   let currentSessionId = null;
   let currentUser = null;
   let assessmentMode = 'conversational'; // Default mode
+  let audioStreamBuffer = [];
   
   socket.on('authenticate', (data) => {
     // In a real implementation, we would verify the token
@@ -85,9 +86,7 @@ io.on('connection', (socket) => {
     // Set assessment mode if provided
     if (data.mode) {
       assessmentMode = data.mode;
-   
-    
- }
+    }
     
     // Create a new session
     currentSessionId = uuidv4();
@@ -281,13 +280,25 @@ io.on('connection', (socket) => {
   
   socket.on('disconnect', () => {
     console.log('Client disconnected');
+    // Clean up any audio buffers
+    audioStreamBuffer = [];
   });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
+// Error handling for server startup
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+}).on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.log(`Port ${PORT} is already in use. Trying ${PORT + 1}...`);
+    setTimeout(() => {
+      server.listen(PORT + 1);
+    }, 1000);
+  } else {
+    console.error('Server error:', err);
+  }
 });
 
 module.exports = app;

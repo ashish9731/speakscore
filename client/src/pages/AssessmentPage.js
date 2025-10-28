@@ -18,8 +18,8 @@ const AssessmentPage = ({ conversation, setConversation, setAnalysis }) => {
   const speechSynthesisRef = useRef(null);
 
   useEffect(() => {
-    // Initialize socket connection
-    socket = io('http://localhost:5000');
+    // Initialize socket connection to the correct port
+    socket = io('http://localhost:5001');
     
     socket.on('connect', () => {
       console.log('Connected to server');

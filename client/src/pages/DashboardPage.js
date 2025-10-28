@@ -14,11 +14,23 @@ const DashboardPage = ({ analysis, conversation }) => {
   }, [analysis]);
 
   const restartAssessment = () => {
+    navigate('/assessment');
+  };
+
+  const goHome = () => {
     navigate('/');
   };
 
   if (!dashboardData) {
-    return <div className="dashboard-container">Loading analysis...</div>;
+    return (
+      <div className="dashboard-container">
+        <div className="header">
+          <button className="back-button" onClick={goHome}>← Home</button>
+          <h1>Communication Assessment Dashboard</h1>
+        </div>
+        <div className="loading">Loading analysis... If this takes too long, please end your assessment and try again.</div>
+      </div>
+    );
   }
 
   // Function to get score category (Low, Medium, High)
@@ -35,10 +47,45 @@ const DashboardPage = ({ analysis, conversation }) => {
     if (score >= 18) return 'Fair';
     return 'Needs Improvement';
   };
+  
+  // Function to get score color
+  const getScoreColor = (score) => {
+    if (score >= 26) return '#4CAF50'; // Green
+    if (score >= 22) return '#2196F3'; // Blue
+    if (score >= 18) return '#FF9800'; // Orange
+    return '#F44336'; // Red
+  };
+
+  // Ensure we have valid data
+  const validScores = dashboardData.scores || {
+    overall: 0,
+    fluency: 0,
+    pronunciation: 0,
+    grammar: 0,
+    vocabulary: 0,
+    coherence: 0,
+    completeness: 0
+  };
+
+  const validAiAnalysis = dashboardData.aiAnalysis || {
+    scores: {
+      fluency: {score: 0, explanation: "Not available"},
+      grammar: {score: 0, explanation: "Not available"},
+      vocabulary: {score: 0, explanation: "Not available"}
+    },
+    breakdown: {
+      strengths: ["No data available"],
+      weaknesses: ["No data available"],
+      recommendations: ["Complete an assessment to get analysis"]
+    }
+  };
 
   return (
     <div className="dashboard-container">
-      <h1>Communication Assessment Dashboard</h1>
+      <div className="header">
+        <button className="back-button" onClick={goHome}>← Home</button>
+        <h1>Communication Assessment Dashboard</h1>
+      </div>
       
       <div className="assessment-mode">
         <h2>Assessment Mode: 
@@ -51,7 +98,7 @@ const DashboardPage = ({ analysis, conversation }) => {
       <div className="score-overview">
         <div className="overall-score">
           <h2>Overall Score</h2>
-          <div className="score-value">{dashboardData.scores.overall}/30</div>
+          <div className="score-value" style={{color: getScoreColor(dashboardData.scores.overall)}}>{dashboardData.scores.overall}/30</div>
           <div className="score-description">{getScoreDescription(dashboardData.scores.overall)}</div>
         </div>
       </div>
@@ -59,27 +106,27 @@ const DashboardPage = ({ analysis, conversation }) => {
       <div className="score-grid">
         <div className={`score-item ${getScoreCategory(dashboardData.scores.fluency)}`}>
           <h3>Fluency</h3>
-          <div className="score-value">{dashboardData.scores.fluency}/30</div>
+          <div className="score-value" style={{color: getScoreColor(dashboardData.scores.fluency)}}>{dashboardData.scores.fluency}/30</div>
         </div>
         <div className={`score-item ${getScoreCategory(dashboardData.scores.pronunciation)}`}>
           <h3>Pronunciation</h3>
-          <div className="score-value">{dashboardData.scores.pronunciation}/30</div>
+          <div className="score-value" style={{color: getScoreColor(dashboardData.scores.pronunciation)}}>{dashboardData.scores.pronunciation}/30</div>
         </div>
         <div className={`score-item ${getScoreCategory(dashboardData.scores.grammar)}`}>
           <h3>Grammar</h3>
-          <div className="score-value">{dashboardData.scores.grammar}/30</div>
+          <div className="score-value" style={{color: getScoreColor(dashboardData.scores.grammar)}}>{dashboardData.scores.grammar}/30</div>
         </div>
         <div className={`score-item ${getScoreCategory(dashboardData.scores.vocabulary)}`}>
           <h3>Vocabulary</h3>
-          <div className="score-value">{dashboardData.scores.vocabulary}/30</div>
+          <div className="score-value" style={{color: getScoreColor(dashboardData.scores.vocabulary)}}>{dashboardData.scores.vocabulary}/30</div>
         </div>
         <div className={`score-item ${getScoreCategory(dashboardData.scores.coherence)}`}>
           <h3>Coherence</h3>
-          <div className="score-value">{dashboardData.scores.coherence}/30</div>
+          <div className="score-value" style={{color: getScoreColor(dashboardData.scores.coherence)}}>{dashboardData.scores.coherence}/30</div>
         </div>
         <div className={`score-item ${getScoreCategory(dashboardData.scores.completeness)}`}>
           <h3>Completeness</h3>
-          <div className="score-value">{dashboardData.scores.completeness}/30</div>
+          <div className="score-value" style={{color: getScoreColor(dashboardData.scores.completeness)}}>{dashboardData.scores.completeness}/30</div>
         </div>
       </div>
       
@@ -159,6 +206,7 @@ const DashboardPage = ({ analysis, conversation }) => {
       </div>
       
       <div className="actions">
+        <button onClick={goHome}>Home</button>
         <button onClick={restartAssessment}>Restart Assessment</button>
       </div>
     </div>

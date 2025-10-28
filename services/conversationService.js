@@ -60,73 +60,73 @@ class ConversationService {
       // Single speaker mode - give a topic and let user speak
       switch (currentState) {
         case 'greeting':
-          response = "Hello! Welcome to the Communication Assessment. In Single Speaker mode, I'll give you a topic and you'll have 2 minutes to speak about it. Let's begin. Your first topic is: Describe your ideal job and why you're interested in it.";
+          response = "Hello! Welcome to the Communication Assessment. In Single Speaker mode, I'll give you a topic and you'll have 2 minutes to speak about it. Let's begin. Your first topic is: Describe your ideal job and why you're interested in it. When you're ready, click the Start Speaking button and begin.";
           nextState = 'topic1';
           break;
           
         case 'topic1':
-          response = "Great! Now, let's talk about your educational background. Please describe your educational journey and how it has prepared you for your career goals.";
+          response = "Great! Now, let's talk about your educational background. Please describe your educational journey and how it has prepared you for your career goals. Take your time and speak clearly.";
           nextState = 'topic2';
           break;
           
         case 'topic2':
-          response = "Interesting! Now, tell me about a challenge you've faced and how you overcame it.";
+          response = "Interesting! Now, tell me about a challenge you've faced and how you overcame it. Be specific about the situation and your approach to solving it.";
           nextState = 'topic3';
           break;
           
         case 'topic3':
-          response = "Thank you for sharing that. Finally, what are your goals for the future?";
+          response = "Thank you for sharing that. Finally, what are your goals for the future? Please describe both your short-term and long-term aspirations.";
           nextState = 'topic4';
           break;
           
         case 'topic4':
-          response = "That's wonderful! We've completed the Single Speaker assessment. You can now view your detailed analysis on the dashboard.";
+          response = "That's wonderful! We've completed the Single Speaker assessment. You can now view your detailed analysis on the dashboard. Click the 'End Assessment' button to see your results.";
           nextState = 'completed';
           break;
           
         default:
-          response = "Please continue speaking about the topic.";
+          response = "Please continue speaking about the topic. Try to elaborate on your points and provide specific examples.";
       }
     } else {
       // Conversational mode - interactive interview
       switch (currentState) {
         case 'greeting':
-          response = "Hello! Welcome to the Communication Assessment Interview. Let's begin. Please tell me about yourself.";
+          response = "Hello! Welcome to the Communication Assessment Interview. I'm here to have a conversation with you to evaluate your communication skills. Let's begin. Please tell me about yourself, including your background and interests.";
           nextState = 'introduction';
           break;
           
         case 'introduction':
-          response = "That's a great introduction. Now, I'd like to know more about your educational background. Can you tell me about your studies?";
+          response = "That's a great introduction. Now, I'd like to know more about your educational background. Can you tell me about your studies and any academic achievements that you're proud of?";
           nextState = 'education';
           break;
           
         case 'education':
-          response = "Interesting! Now let's talk about your work experience. What kind of work have you been doing?";
+          response = "Interesting! Now let's talk about your work experience. What kind of work have you been doing, and what have you learned from these experiences?";
           nextState = 'work';
           break;
           
         case 'work':
-          response = "That sounds fulfilling. Let's discuss your communication skills. How do you usually communicate with your colleagues?";
+          response = "That sounds fulfilling. Let's discuss your communication skills. How do you usually communicate with your colleagues, and can you give me an example of a time when effective communication was crucial?";
           nextState = 'communication';
           break;
           
         case 'communication':
-          response = "Good to know. Now, let's talk about challenges. What's the biggest challenge you've faced in your career?";
+          response = "Good to know. Now, let's talk about challenges. What's the biggest challenge you've faced in your career, and how did you overcome it? Please walk me through your thought process.";
           nextState = 'challenge';
           break;
           
         case 'challenge':
-          response = "Thank you for sharing that. Finally, what are your goals for the future?";
+          response = "Thank you for sharing that. Finally, what are your goals for the future? How do you plan to achieve them, and how will this assessment help you?";
           nextState = 'future';
           break;
           
         case 'future':
-          response = "That's wonderful! We've covered a lot of ground. Thank you for participating in this assessment. You can now view your detailed analysis on the dashboard.";
+          response = "That's wonderful! We've covered a lot of ground in our conversation. Thank you for participating in this assessment. You can now view your detailed analysis on the dashboard. Click the 'End Assessment' button to see your results.";
           nextState = 'completed';
           break;
           
         default:
-          response = "That's interesting. Tell me more about that.";
+          response = "That's interesting. Could you tell me more about that? I'd like to understand your perspective better.";
       }
     }
     

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
 import AssessmentPage from './pages/AssessmentPage';
 import DashboardPage from './pages/DashboardPage';
 import './App.css';
@@ -12,7 +13,8 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={
+          <Route path="/" element={<HomePage />} />
+          <Route path="/assessment" element={
             <AssessmentPage 
               conversation={conversation} 
               setConversation={setConversation}
