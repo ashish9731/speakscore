@@ -23,7 +23,21 @@ const io = socketIo(server, {
 app.use(cors());
 app.use(express.json({ limit: '50mb' })); // Increase limit for audio data
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-app.use(express.static(path.join(__dirname, 'client/build')));
+
+// Serve static files from the React app build directory
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'client/build')));
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build/index.html'));
+  });
+} else {
+  app.use(express.static(path.join(__dirname, 'client/build')));
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build/index.html'));
+  });
+}
 
 // Import services
 const ConversationService = require('./services/conversationService');
@@ -39,11 +53,6 @@ const apiRoutes = require('./routes/api');
 
 // Use routes
 app.use('/api', apiRoutes);
-
-// Serve static files from the React app build directory
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/build/index.html'));
-});
 
 // Socket.io connection handling with authentication
 io.use((socket, next) => {
@@ -280,3 +289,5 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+module.exports = app;

@@ -6,23 +6,24 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "build": "cd client && npm run build",
+    "build": "cd client && npm install && npm run build",
     "client": "cd client && npm start",
-    "dev:full": "concurrently \"npm run dev\" \"npm run client\""
+    "dev:full": "concurrently \"npm run dev\" \"npm run client\"",
+    "vercel-build": "npm run build"
   },
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "express": "^4.18.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.2",
-    "openai": "^4.20.0",
     "socket.io": "^4.7.2",
-    "uuid": "^9.0.1"
+    "openai": "^4.20.0",
+    "uuid": "^9.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "bcrypt": "^5.1.1"
   },
   "devDependencies": {
-    "concurrently": "^8.2.0",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "concurrently": "^8.2.0"
   },
   "keywords": [
     "communication",
