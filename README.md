@@ -1,111 +1,175 @@
 # Communication Assessment Interview Bot
 
-A comprehensive application for assessing communication skills through conversational AI. This application evaluates users' speaking abilities based on TOEFL-like criteria and provides detailed feedback through an analytics dashboard.
+A speech-to-speech and speech-to-text communication assessment application that evaluates users' speaking skills through conversation. The application supports two assessment modes:
+
+1. **Conversational Mode**: Speech-to-speech processing with natural voice responses
+2. **Single Speaker Mode**: Speech-to-text processing with detailed analysis
 
 ## Features
 
-- Conversational AI interview bot
-- Real-time communication assessment
-- Google TTS integration for Indian English
-- TOEFL-style scoring system
-- Detailed analytics dashboard
-- OpenAI-powered analysis
-- Responsive web interface
+- **Speech-to-Speech Assessment**: Users speak and receive natural voice responses
+- **Speech-to-Text Assessment**: Users speak and receive text analysis
+- **TOEFL-style Scoring**: Detailed scoring from 0-30 for multiple communication aspects
+- **AI-powered Analysis**: OpenAI GPT-3.5 Turbo for conversation analysis
+- **Real-time Feedback**: Immediate feedback on speaking performance
+- **Comprehensive Dashboard**: Detailed breakdown of strengths and areas for improvement
 
-## Tech Stack
+## Technologies Used
 
-- **Backend**: Node.js, Express.js, Socket.IO
-- **Frontend**: React.js, React Router
-- **AI Services**: Google Cloud Text-to-Speech, OpenAI GPT-3.5 Turbo
-- **Real-time Communication**: WebSocket (Socket.IO)
+- **Frontend**: React.js with Socket.IO client
+- **Backend**: Node.js with Express.js
+- **Speech Processing**: Web Speech API (free) for text-to-speech
+- **Speech Recognition**: MediaRecorder API for audio capture
+- **AI Analysis**: OpenAI Whisper for transcription, GPT-3.5 Turbo for analysis
+- **Real-time Communication**: Socket.IO for WebSocket connections
 
-## Prerequisites
+## Assessment Modes
 
+### Conversational Mode
+- Interactive back-and-forth conversation
+- Natural voice responses using Web Speech API
+- Real-time speech processing
+- Comprehensive communication evaluation
+
+### Single Speaker Mode
+- Monologue on provided topics
+- Speech-to-text transcription
+- Detailed analysis of speaking performance
+- Focus on fluency, grammar, vocabulary, and pronunciation
+
+## Scoring System
+
+TOEFL-style scoring (0-30 scale) for:
+- Fluency and Coherence
+- Grammar Range and Accuracy
+- Lexical Resource/Vocabulary
+- Pronunciation
+- Overall Communication Skills
+
+## Getting Started
+
+### Prerequisites
 - Node.js (v14 or higher)
 - npm or yarn
-- Google Cloud account for TTS service
 - OpenAI API key
 
-## Installation
+### Installation
 
 1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   ```
+```bash
+git clone https://github.com/ashish9731/speakscore.git
+cd speakscore
+```
 
 2. Install backend dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
 3. Install frontend dependencies:
-   ```bash
-   cd client
-   npm install
-   cd ..
-   ```
+```bash
+cd client
+npm install
+cd ..
+```
 
-4. Set up environment variables:
-   - Copy `.env.example` to `.env`
-   - Add your Google Cloud credentials path
-   - Add your OpenAI API key
+4. Create a `.env` file in the root directory:
+```env
+OPENAI_API_KEY=your_openai_api_key_here
+PORT=5000
+```
 
-## Usage
+### Running the Application
 
-1. Start the development server:
-   ```bash
-   npm run dev:full
-   ```
+#### Development Mode
+```bash
+# Run both frontend and backend
+npm run dev:full
 
-2. Open your browser to `http://localhost:3000`
+# Run backend only
+npm run dev
 
-3. Begin the assessment by speaking with the interview bot
+# Run frontend only
+npm run client
+```
 
-4. View your detailed analysis on the dashboard
+#### Production Mode
+```bash
+# Build the frontend
+npm run build
+
+# Start the server
+npm start
+```
+
+The application will be available at:
+- Frontend: http://localhost:3000
+- Backend: http://localhost:5000
+
+## Deployment
+
+### Vercel Deployment
+
+This application is configured for easy deployment on Vercel:
+
+1. Push your code to GitHub
+2. Connect your GitHub repository to Vercel
+3. Add your `OPENAI_API_KEY` as an environment variable in Vercel
+4. Deploy!
+
+The application will automatically build and deploy with the proper configuration.
+
+### Environment Variables for Production
+
+- `OPENAI_API_KEY`: Your OpenAI API key
+- `NODE_ENV`: Set to "production"
+- `PORT`: Vercel will automatically set this
 
 ## Project Structure
 
 ```
 ├── client/                 # React frontend
-│   ├── public/             # Static assets
-│   └── src/                # Source code
-│       ├── components/     # Reusable components
-│       ├── pages/          # Page components
-│       ├── services/       # API services
-│       └── utils/          # Utility functions
-├── controllers/            # Request handlers
+│   ├── src/
+│   │   ├── pages/          # Assessment and Dashboard pages
+│   │   ├── components/     # Reusable components
+│   │   └── App.js          # Main application component
+│   └── package.json        # Frontend dependencies
+├── services/               # Backend services
+│   ├── openaiService.js    # OpenAI API integration
+│   ├── conversationService.js # Conversation logic
+│   └── scoringService.js   # Scoring algorithms
 ├── routes/                 # API routes
-├── services/               # Business logic and external services
-├── .env                    # Environment variables
-├── server.js               # Entry point
-└── package.json            # Project dependencies
+├── controllers/            # Route controllers
+├── middleware/             # Express middleware
+├── models/                 # Data models
+├── tests/                  # Unit tests
+├── server.js              # Main server file
+├── vercel.json            # Vercel deployment configuration
+└── package.json           # Backend dependencies
 ```
 
-## Components
+## Browser Support
 
-### 1. Interview Bot
-The conversational AI that conducts the assessment interview, simulating a real interview scenario.
+The application works best in modern browsers that support:
+- Web Speech API (for text-to-speech)
+- MediaRecorder API (for audio recording)
+- WebSocket (for real-time communication)
 
-### 2. Scoring Engine
-Analyzes speech patterns and provides scores based on:
-- Fluency and Coherence
-- Grammar Range and Accuracy
-- Lexical Resource
-- Pronunciation
-- Overall Communication Skills
+Recommended browsers:
+- Google Chrome 60+
+- Microsoft Edge 79+
+- Firefox 25+
+- Safari 14.1+
 
-### 3. Analytics Dashboard
-Provides detailed insights including:
-- Overall and component scores
-- Strengths and weaknesses
-- Personalized recommendations
-- Conversation history
+## API Usage
 
-## API Endpoints
+### OpenAI Whisper (Speech-to-Text)
+- Model: whisper-1
+- Used for transcribing user speech
 
-- `POST /api/start` - Initialize assessment session
-- `POST /api/analysis` - Get communication analysis
-- `POST /api/feedback` - Submit user feedback
+### OpenAI GPT-3.5 Turbo (Analysis)
+- Model: gpt-3.5-turbo
+- Used for conversation analysis and scoring
 
 ## Contributing
 
@@ -119,8 +183,6 @@ Provides detailed insights including:
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgments
+## Contact
 
-- Google Cloud Text-to-Speech for voice synthesis
-- OpenAI for language analysis capabilities
-- TOEFL for assessment criteria inspiration
+For questions or support, please open an issue on GitHub.
