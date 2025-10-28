@@ -10,7 +10,7 @@ A speech-to-speech and speech-to-text communication assessment application that 
 - **Speech-to-Speech Assessment**: Users speak and receive natural voice responses
 - **Speech-to-Text Assessment**: Users speak and receive text analysis
 - **TOEFL-style Scoring**: Detailed scoring from 0-30 for multiple communication aspects
-- **AI-powered Analysis**: OpenAI GPT-3.5 Turbo for conversation analysis
+- **AI-powered Analysis**: OpenAI Whisper for transcription, GPT-3.5 Turbo for analysis
 - **Real-time Feedback**: Immediate feedback on speaking performance
 - **Comprehensive Dashboard**: Detailed breakdown of strengths and areas for improvement
 
@@ -129,6 +129,7 @@ The application will automatically build and deploy with the proper configuratio
 
 ```
 ├── client/                 # React frontend
+│   ├── public/             # Public assets (index.html, favicon, etc.)
 │   ├── src/
 │   │   ├── pages/          # Assessment and Dashboard pages
 │   │   ├── components/     # Reusable components
@@ -170,6 +171,20 @@ Recommended browsers:
 ### OpenAI GPT-3.5 Turbo (Analysis)
 - Model: gpt-3.5-turbo
 - Used for conversation analysis and scoring
+
+## Troubleshooting
+
+### Build Issues
+If you encounter build issues, make sure:
+1. All dependencies are installed: `npm install` in both root and client directories
+2. The client/public directory contains the required files (index.html, manifest.json, etc.)
+3. Your OpenAI API key is valid and has the necessary permissions
+
+### Deployment Issues
+If deployment fails on Vercel:
+1. Check that your environment variables are correctly set
+2. Ensure your OpenAI API key is added to Vercel environment variables
+3. Verify that the build process completes successfully locally
 
 ## Contributing
 
