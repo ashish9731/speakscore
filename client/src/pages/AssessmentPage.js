@@ -8,7 +8,6 @@ let socket;
 const AssessmentPage = ({ conversation, setConversation, setAnalysis }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const [sessionId, setSessionId] = useState(null);
   const [assessmentMode, setAssessmentMode] = useState('conversational'); // Default mode
   const [showModeSelector, setShowModeSelector] = useState(true);
   const [isSupported, setIsSupported] = useState(true);
@@ -45,9 +44,6 @@ const AssessmentPage = ({ conversation, setConversation, setAnalysis }) => {
       }
       
       setConversation(prev => [...prev, { speaker: 'bot', message: data.message }]);
-      if (data.sessionId) {
-        setSessionId(data.sessionId);
-      }
     });
     
     socket.on('assessment_complete', (data) => {
@@ -93,7 +89,7 @@ const AssessmentPage = ({ conversation, setConversation, setAnalysis }) => {
         speechSynthesisRef.current.cancel();
       }
     };
-  }, [assessmentMode]);
+  }, [assessmentMode, setConversation, setAnalysis, navigate]);
   
   useEffect(() => {
     // Scroll to bottom of conversation
