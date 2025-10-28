@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+client/node_modules/
+
+# Logs
+logs
+*.log
+
+# Environment variables
+.env
+
+# Build outputs
+build/
+dist/
+.out
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Temp files
+temp/
+*.tmp
+
+# Coverage reports
+coverage/
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Database files
+*.db
+*.sqlite
+
+# Vercel
+.vercel/
+
+# Next.js
+.next/
+
+# React build
+client/build/
